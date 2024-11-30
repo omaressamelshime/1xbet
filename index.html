@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hack 1xbet</title>
+<link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('88.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.705);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: rgb(0, 0, 0);
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #1900ff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #1100ff;
+        }
+        .disabled {
+            background-color: red !important;
+            cursor: not-allowed;
+        }
+        #copyButton {
+            background-color: green;
+        }
+        #copyButton:hover {
+            background-color: darkgreen;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+        #gamesModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .games-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .game-item {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        .game-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .game-item.selected {
+            opacity: 0.5;
+        }
+        .game-item.selected::after {
+            content: "✔";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: green;
+            font-weight: bold;
+        }
+        #confirmSelection {
+            background-color: #28a745;
+        }
+        #confirmSelection:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>أدخل كلمة المرور</h1>
+        <input type="password" id="password" placeholder="كلمة السر">
+        <button id="confirmButton" onclick="checkPassword()">تأكيد</button>
+        <button id="copyButton" onclick="copyLink()">الحصول على كلمة المرور</button>
+        <p id="errorMessage" class="error" style="display: none;">كلمة المرور غير صحيحة. حاول مرة أخرى.</p>
+        <p id="lockMessage" class="error" style="display: none;">تم قفل خانة الإدخال لمدة 5 دقائق.</p>
+        <p id="countdown" class="countdown"></p>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div id="gamesModal">
+        <h2>اختر اللعبة التي تريد لعبها</h2>
+        <div class="games-grid">
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game1.jpg" alt="Game 1">
+            </div>
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game2.jpg" alt="Game 2">
+            </div>
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game3.jpg" alt="Game 3">
+            </div>
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game4.jpg" alt="Game 4">
+            </div>
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game5.jpg" alt="Game 5">
+            </div>
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game6.jpg" alt="Game 6">
+            </div>
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game7.jpg" alt="Game 7">
+            </div>
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game8.jpg" alt="Game 8">
+            <div class="game-item" onclick="selectGame(this)">
+                <img src="game9.jpg" alt="Game 9">
+            </div>
+            
+        </div>
+        <button id="confirmSelection" onclick="redirectToNextPage()">تم الاختيار</button>
+    </div>
+
+    <audio id="clickSound" src="uo.mp3"></audio>
+    <audio id="errorSound" src="xpassword.mp3"></audio>
+    <audio id="successSound" src="tpassword.mp3"></audio>
+
+    <script>
+        const validPasswords = [
+            "46688",
+            "1-xbetA1B2C3",
+            "1-xbetD4E5F6",
+            "1-xbetG7H8I9",
+            "1-xbetJ0K1L2",
+            "1-xbetM3N4O5",
+            "1-xbetP6Q7R8",
+            "1-xbetS9T0U1",
+            "1-xbetV2W3X4",
+            "1-xbetY5Z6A7",
+            "1-xbetB8C9D0",
+            "1-xbetE1F2G3",
+            "1-xbetH4I5J6",
+            "1-xbetK7L8M9",
+            "1-xbetN0O1P2",
+            "1-xbetQ3R4S5",
+            "1-xbetT6U7V8",
+            "1-xbetW9X0Y1",
+            "1-xbetZ2A3B4",
+            "1-xbetC5D6E7",
+            "1-xbetF8G9H0",
+            "1-xbetI1J2K3",
+            "1-xbetL4M5N6",
+            "1-xbetO7P8Q9",
+            "1-xbetR0S1T2",
+            "1-xbetU3V4W5",
+            "1-xbetX6Y7Z8",
+            "1-xbetA9B0C1",
+            "1-xbetD2E3F4",
+            "1-xbetG5H6I7",
+            "1-xbetJ8K9L0",
+            "1-xbetM1N2O3",
+            "1-xbetP4Q5R6",
+            "1-xbetS7T8U9",
+            "1-xbetV0W1X2",
+            "1-xbetY3Z4A5",
+            "1-xbetB6C7D8",
+            "1-xbetE9F0G1",
+            "1-xbetH2I3J4",
+            "1-xbetK5L6M7"
+        ];
+        const maxAttempts = 3;
+        let attemptsLeft = maxAttempts;
+        let selectedGame = null;
+
+        const clickSound = document.getElementById("clickSound");
+        const errorSound = document.getElementById("errorSound");
+        const successSound = document.getElementById("successSound");
+
+        function playClickSound() {
+            clickSound.currentTime = 0;
+            clickSound.play();
+        }
+
+        function playErrorSound() {
+            errorSound.currentTime = 0;
+            errorSound.play();
+        }
+
+        function playSuccessSound() {
+            successSound.currentTime = 0;
+            successSound.play();
+        }
+
+        function checkPassword() {
+    playClickSound();
+    const password = document.getElementById("password").value;
+    const confirmButton = document.getElementById("confirmButton");
+
+    // تعطيل الزر أثناء فترة القفل
+    if (confirmButton.disabled) return;
+
+    if (validPasswords.includes(password)) {
+        playSuccessSound();
+        showGamesModal();
+    } else {
+        playErrorSound();
+        attemptsLeft--;
+        alert(`كلمة المرور غير صحيحة. المحاولات المتبقية: ${attemptsLeft}`);
+        if (attemptsLeft <= 0) {
+            lockInput(300000); // فترة القفل 5 دقائق
+        }
+    }
+}
+
+function lockInput(duration) {
+    const passwordInput = document.getElementById("password");
+    const lockMessage = document.getElementById("lockMessage");
+    const countdown = document.getElementById("countdown");
+    const confirmButton = document.getElementById("confirmButton");
+
+    passwordInput.disabled = true;
+    confirmButton.disabled = true; // تعطيل الزر أثناء فترة القفل
+    lockMessage.style.display = "block";
+    countdown.style.display = "block";
+
+    let remainingTime = duration / 1000;
+    const timer = setInterval(() => {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        countdown.textContent = `الوقت المتبقي: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        remainingTime--;
+
+        if (remainingTime < 0) {
+            clearInterval(timer);
+            unlockInput();
+        }
+    }, 1000);
+}
+
+function unlockInput() {
+    document.getElementById("password").disabled = false;
+    document.getElementById("confirmButton").disabled = false; // تمكين الزر بعد فترة القفل
+    document.getElementById("lockMessage").style.display = "none";
+    document.getElementById("countdown").style.display = "none";
+    attemptsLeft = maxAttempts;
+}
+
+
+        function copyLink() {
+            const link = "https://example.com/password-key";
+            navigator.clipboard.writeText(link).then(() => {
+                alert("تم نسخ الرابط!");
+                copyButton.style.backgroundColor = "orange";
+                copyButton.textContent = "تم نسخ رابط موقع كلمات المرور";
+            }).catch(() => {
+                alert("حدث خطأ أثناء النسخ!");
+            });
+        }
+
+        function showGamesModal() {
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("gamesModal").style.display = "block";
+        }
+
+        function selectGame(gameElement) {
+            if (selectedGame) {
+                selectedGame.classList.remove("selected");
+            }
+            selectedGame = gameElement;
+            gameElement.classList.add("selected");
+        }
+
+        function redirectToNextPage() {
+            if (selectedGame) {
+                window.location.href = "https://fairwayelectricalandlighting.xyz/Oxbet?id=b4cab67f-c6e6-4e9c-322d-08dc89f259e3";
+            } else {
+                alert("يرجى اختيار لعبة قبل المتابعة.");
+            }
+        }
+    </script>
+
+</body>
+</html>
